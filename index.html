@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uji Kompetensi Matriks - Al Mazaya Islamic School</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Konfigurasi MathJax v3 -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' },
+            startup: {
+                ready: () => {
+                    MathJax.startup.defaultReady();
+                    window.mathjaxReady = true;
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg-app: #f4f6fb;
+            --surface: #ffffff;
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --primary-light: #eeeffe;
+            --secondary: #06b6d4;
+            --accent: #f97316;
+            --success: #10b981;
+            --success-soft: #ecfdf5;
+            --danger: #ef4444;
+            --danger-soft: #fef2f2;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-ui: #e2e8f0;
+            --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.02);
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        /* OVERLAY LOGIN */
+        #loginOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: 36px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            text-align: center;
+        }
+
+        .login-brand-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+        }
+
+        .login-card h2 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .login-card p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            margin-bottom: 24px;
+        }
+
+        .login-field-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+
+        .login-field-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .login-field-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            border: 1.5px solid var(--border-ui);
+            font-size: 0.95rem;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .login-field-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: var(--radius-md);
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        #loginErrMsg {
+            color: var(--danger);
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .login-hints {
+            margin-top: 20px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: var(--radius-md);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-align: left;
+            line-height: 1.5;
+            border: 1px solid var(--border-ui);
+        }
+
+        /* CUSTOM NOTIFICATION MODAL */
+        #customModal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-box {
+            background: var(--surface);
+            padding: 28px;
+            border-radius: var(--radius-xl);
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .modal-box h4 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+        .modal-box p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .btn-modal-close {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* LIGHTBOX & INSPEKSI MODAL */
+        #lightboxModal, #inspectModal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 10005;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .inspect-card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            max-width: 860px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+        }
+
+        /* DASHBOARD APP WRAPPER */
+        .dashboard-wrapper {
+            max-width: 1320px;
+            margin: 0 auto;
+        }
+
+        header.top-bar {
+            background: var(--surface);
+            padding: 16px 28px;
+            border-radius: var(--radius-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-card);
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .brand-title {
+            font-weight: 800;
+            font-size: 1.15rem;
+            background: linear-gradient(135deg, #1e293b, #4f46e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .nav-pills {
+            display: flex;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 6px;
+            border-radius: 16px;
+        }
+
+        .pill-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pill-btn.active {
+            background: var(--surface);
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn-logout {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover { background: #fca5a5; }
+
+        .hero-card {
+            background: linear-gradient(135deg, #312e81 0%, #4338ca 50%, #6366f1 100%);
+            color: white;
+            padding: 28px 36px;
+            border-radius: var(--radius-xl);
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 16px 32px -8px rgba(79, 70, 229, 0.3);
+        }
+
+        .hero-info h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-info p {
+            font-size: 0.92rem;
+            opacity: 0.88;
+            margin-top: 4px;
+        }
+
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2.3fr 1fr;
+            gap: 24px;
+        }
+
+        .ui-card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            box-shadow: var(--shadow-card);
+            margin-bottom: 24px;
+            border: 1px solid var(--border-ui);
+        }
+
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .tag-purple { background: var(--primary-light); color: var(--primary); }
+        .tag-emerald { background: var(--success-soft); color: var(--success); }
+        .tag-orange { background: #fff7ed; color: #ea580c; }
+        .tag-cyan { background: #ecfeff; color: #0891b2; }
+
+        .card-header-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .text-desc {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        /* SOAL CARD KONSISTEN SEPERTI GAMBAR REFERENSI */
+        .soal-box-container {
+            background: #ffffff;
+            border-radius: var(--radius-xl);
+            border: 1.5px solid var(--border-ui);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+        }
+
+        .soal-box-container:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+        }
+
+        .soal-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .soal-badge-pill {
+            background: #eef2ff;
+            color: #4f46e5;
+            font-weight: 800;
+            font-size: 0.82rem;
+            padding: 6px 16px;
+            border-radius: 99px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .soal-topic-header {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #94a3b8;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .soal-content-border {
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 18px 20px;
+            margin-bottom: 18px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-main);
+        }
+
+        /* UPLOAD SECTION SEPERTI GAMBAR REFERENSI */
+        .upload-section-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .upload-title-text {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .upload-counter-badge {
+            background: #eef2ff;
+            color: #4f46e5;
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 99px;
+        }
+
+        .file-input-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 8px 12px;
+            margin-bottom: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-choose-file {
+            background: #eef2ff;
+            color: #4f46e5;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .btn-choose-file:hover {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .file-name-indicator {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .preview-green-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #0d9488;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .thumbnail-gallery-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .photo-thumb-card {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            background: #0f172a;
+            transition: transform 0.2s;
+        }
+
+        .photo-thumb-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .photo-thumb-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .btn-thumb-zoom {
+            position: absolute;
+            top: 8px; left: 8px;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.65);
+            color: white; border: none;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 0.75rem;
+            backdrop-filter: blur(2px);
+        }
+
+        .btn-thumb-edit {
+            position: absolute;
+            top: 8px; left: 42px;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.85);
+            color: white; border: none;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 0.75rem;
+            backdrop-filter: blur(2px);
+        }
+
+        .btn-thumb-del {
+            position: absolute;
+            top: 8px; right: 8px;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: #ef4444;
+            color: white; border: none;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 0.85rem;
+            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+        }
+
+        .thumb-bottom-label {
+            position: absolute;
+            bottom: 8px; left: 8px;
+            background: rgba(15, 23, 42, 0.75);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
+            backdrop-filter: blur(2px);
+        }
+
+        /* TRACKER ITEM SIDEBAR */
+        .tracker-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1.5px solid var(--border-ui);
+            margin-bottom: 8px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.25s;
+        }
+
+        .tracker-item.done {
+            background: var(--success-soft);
+            border-color: #6ee7b7;
+            color: #065f46;
+        }
+
+        .btn-action-primary {
+            background: linear-gradient(135deg, var(--accent), #ea580c);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px 28px;
+            border-radius: var(--radius-lg);
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.25);
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .btn-action-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(249, 115, 22, 0.35);
+        }
+
+        .btn-refresh {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-refresh:hover { background: var(--primary-dark); }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card-item {
+            background: var(--surface);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-ui);
+            box-shadow: var(--shadow-card);
+        }
+
+        .stat-card-item h4 {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .stat-card-item .val {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 6px;
+        }
+
+        .table-container {
+            border-radius: var(--radius-lg);
+            overflow-x: auto;
+            border: 1px solid var(--border-ui);
+            margin: 18px 0;
+        }
+
+        table.custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+        }
+
+        table.custom-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 800;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            padding: 14px 18px;
+            text-align: center;
+            border-bottom: 1.5px solid var(--border-ui);
+        }
+
+        table.custom-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: center;
+            font-size: 0.92rem;
+        }
+
+        .badge-status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-done { background: var(--success-soft); color: var(--success); }
+        .badge-pending { background: #fff7ed; color: #c2410c; }
+        .badge-kkm { background: #dcfce7; color: #15803d; }
+        .badge-lengkap { background: #e0f2fe; color: #0369a1; }
+        .badge-sebagian { background: #fef3c7; color: #b45309; }
+        .badge-belum { background: #ffe4e6; color: #be123c; }
+
+        .btn-inspeksi {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.84rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.22);
+            transition: all 0.2s;
+        }
+
+        .btn-inspeksi:hover { background: #4338ca; transform: translateY(-1px); }
+
+        @media (max-width: 900px) {
+            .main-grid { grid-template-columns: 1fr; }
+            header.top-bar { flex-direction: column; gap: 16px; }
+            .hero-card { flex-direction: column; text-align: center; gap: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- MODAL NOTIFIKASI UMUM -->
+<div id="customModal">
+    <div class="modal-box">
+        <div style="font-size:2.2rem; color:var(--primary); margin-bottom:10px;"><i class="fa-solid fa-bell"></i></div>
+        <h4 id="modalTitle">Informasi</h4>
+        <p id="modalMessage">Pesan sistem.</p>
+        <button class="btn-modal-close" onclick="closeModal()">Tutup</button>
+    </div>
+</div>
+
+<!-- LIGHTBOX ZOOM FOTO -->
+<div id="lightboxModal" onclick="closeLightbox()">
+    <div style="position:relative; max-width:90vw; max-height:90vh; text-align:center;" onclick="event.stopPropagation()">
+        <button onclick="closeLightbox()" style="position:absolute; top:-15px; right:-15px; width:38px; height:38px; border-radius:50%; background:#ef4444; color:white; border:none; font-size:1.1rem; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img id="lightboxImg" src="" alt="Zoom Foto" style="max-width:100%; max-height:85vh; border-radius:16px; border:3px solid white; box-shadow:0 20px 40px rgba(0,0,0,0.4);">
+    </div>
+</div>
+
+<!-- MODAL INSPEKSI GURU -->
+<div id="inspectModal" onclick="closeInspectModal()">
+    <div class="inspect-card" onclick="event.stopPropagation()">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border-ui); padding-bottom:16px; margin-bottom:20px;">
+            <div>
+                <span class="section-tag tag-purple" style="margin-bottom:4px;"><i class="fa-solid fa-magnifying-glass"></i> Inspeksi Lembar Kerja Murid</span>
+                <h3 id="insNamaMurid" style="font-size:1.3rem; font-weight:800; color:var(--text-main);">Nama Murid</h3>
+                <p id="insMetaMurid" style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">Kelas 11.1 • Status Pengerjaan</p>
+            </div>
+            <button onclick="closeInspectModal()" style="background:#f1f5f9; border:none; width:38px; height:38px; border-radius:12px; cursor:pointer; font-size:1.1rem; color:var(--text-main);">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div id="insBodyContent"></div>
+
+        <div style="margin-top:24px; text-align:right;">
+            <button class="btn-modal-close" onclick="closeInspectModal()">Tutup Inspeksi</button>
+        </div>
+    </div>
+</div>
+
+<!-- OVERLAY LOGIN SYSTEM -->
+<div id="loginOverlay">
+    <div class="login-card">
+        <div class="login-brand-icon"><i class="fa-solid fa-user-lock"></i></div>
+        <h2>AL MAZAYA LEARNING</h2>
+        <p>Akses Uji Kompetensi Matriks - Kelas XI</p>
+
+        <form onsubmit="event.preventDefault(); submitLogin();">
+            <div class="login-field-group">
+                <label for="loginId">ID / Nama Lengkap/Panggilan:</label>
+                <input type="text" id="loginId" placeholder="Misal: Daffano, Marvel, atau guru" required>
+            </div>
+
+            <div class="login-field-group">
+                <label for="loginPass">Password:</label>
+                <input type="password" id="loginPass" placeholder="Masukkan password..." required>
+            </div>
+
+            <button type="submit" class="btn-login"><i class="fa-solid fa-right-to-bracket"></i> MASUK LATIHAN</button>
+        </form>
+
+        <div id="loginErrMsg"></div>
+
+        <div class="login-hints">
+            <b>Ketentuan Akses:</b><br>
+            • <b>Murid:</b> ID = Nama Lengkap/Panggilan, Password = <code>amz</code><br>
+            • <b>Guru:</b> ID = <code>guru</code>, Password = <code>admin</code>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-wrapper">
+    <!-- TOP NAVIGATION BAR -->
+    <header class="top-bar">
+        <div class="brand-logo">
+            <div class="brand-icon"><i class="fa-solid fa-calculator"></i></div>
+            <div>
+                <div class="brand-title">AL MAZAYA ISLAMIC SCHOOL</div>
+                <div class="brand-subtitle">Matematika Tingkat Lanjut - Operasi Matriks</div>
+            </div>
+        </div>
+        <nav class="nav-pills">
+            <button class="pill-btn active" onclick="switchTab('tab-soal', this)">
+                <i class="fa-solid fa-pen-to-square"></i> Lembar Soal (10 Soal)
+            </button>
+            <button class="pill-btn" onclick="switchTab('tab-murid', this)">
+                <i class="fa-solid fa-user-graduate"></i> Dashboard Saya
+            </button>
+            <button id="btnNavGuru" class="pill-btn" onclick="switchTab('tab-guru', this)" style="display:none;">
+                <i class="fa-solid fa-chalkboard-user"></i> Dashboard Guru
+            </button>
+            <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-power-off"></i> Keluar</button>
+        </nav>
+    </header>
+
+    <!-- HERO IDENTITY CARD -->
+    <section class="hero-card">
+        <div class="hero-info">
+            <h1 id="dispNamaMurid">Selamat Datang!</h1>
+            <p id="dispKelasMurid">Kerjakan 10 soal matriks berikut dan unggah foto lembar jawaban Anda pada masing-masing kotak soal.</p>
+        </div>
+    </section>
+
+    <!-- TAB 1: LEMBAR PENGERJAAN SOAL (10 SOAL FOTO) -->
+    <main id="tab-soal" class="tab-pane active">
+        <div class="main-grid">
+            <div class="content-column" id="soalListContainer">
+                <!-- 10 Kartu Soal akan di-render secara dinamis di sini -->
+            </div>
+
+            <!-- SIDEBAR KANAN: TRACKER SOAL OTOMATIS HIJAU (10 SOAL) -->
+            <aside class="sidebar-column">
+                <div class="ui-card" style="position:sticky; top:24px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <h3 style="font-size:1rem; font-weight:800; color:var(--primary); margin:0;">
+                            <i class="fa-solid fa-list-check"></i> Progres Unggahan
+                        </h3>
+                        <span id="trackerCounterPill" class="badge-status badge-lengkap">0 / 10 Soal</span>
+                    </div>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">
+                        Indikator otomatis berubah <b>Hijau</b> saat foto jawaban soal tersebut berhasil diunggah:
+                    </p>
+
+                    <div id="trackerListWrap">
+                        <!-- Indikator 10 Soal -->
+                    </div>
+
+                    <button class="btn-action-primary" onclick="kirimJawaban()">
+                        <i class="fa-solid fa-paper-plane"></i> KIRIM SEMUA JAWABAN
+                    </button>
+                    <p id="submitStatusMsg" style="text-align:center; font-weight:800; font-size:0.85rem; margin-top:10px;"></p>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- TAB 2: DASHBOARD PROGRESS MURID -->
+    <section id="tab-murid" class="tab-pane">
+        <div class="ui-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+                <div>
+                    <h2 class="card-header-title" style="margin-bottom:4px;"><i class="fa-solid fa-user-graduate"></i> Dashboard Progress Saya</h2>
+                    <p class="text-desc" style="margin-bottom:0;">Pantau kelengkapan unggahan lembar jawaban Anda per nomor soal:</p>
+                </div>
+                <button class="btn-refresh" onclick="loadServerData()"><i class="fa-solid fa-arrows-rotate"></i> Refresh Data</button>
+            </div>
+
+            <div class="stat-grid">
+                <div class="stat-card-item">
+                    <h4>Status Pengiriman</h4>
+                    <div id="m_status_text" class="val" style="color:var(--accent);">Belum Mengirim</div>
+                </div>
+                <div class="stat-card-item">
+                    <h4>Progres Unggahan Soal</h4>
+                    <div id="m_progres_val" class="val" style="color:#4f46e5;">0 / 10 Soal</div>
+                </div>
+                <div class="stat-card-item">
+                    <h4>Total Foto Terunggah</h4>
+                    <div id="m_total_foto_val" class="val" style="color:#059669;">0 Foto</div>
+                </div>
+            </div>
+
+            <h3 style="font-size:1rem; font-weight:800; margin-bottom:10px; color:var(--text-main);">
+                <i class="fa-solid fa-list-check"></i> Rincian Kelengkapan 10 Soal
+            </h3>
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th style="text-align:left;">Materi & Soal</th>
+                            <th>Kategori</th>
+                            <th>Jumlah Foto</th>
+                            <th>Status Unggah</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbMuridSoalStatus"></tbody>
+                </table>
+            </div>
+
+            <h3 style="font-size:1rem; font-weight:800; margin:24px 0 10px 0; color:var(--text-main);">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Riwayat Sinkronisasi Server Google Sheet
+            </h3>
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Waktu Submit Terakhir</th>
+                            <th>Materi Tugas</th>
+                            <th>Jumlah Soal Terunggah</th>
+                            <th>Status Sheet</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbMuridSyncHistory">
+                        <tr>
+                            <td colspan="4" style="color:var(--text-muted);">Memuat riwayat server...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 3: DASHBOARD GURU -->
+    <section id="tab-guru" class="tab-pane">
+        <div class="ui-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:12px;">
+                <div>
+                    <h2 class="card-header-title" style="margin-bottom:4px;"><i class="fa-solid fa-chalkboard-user"></i> Dashboard Monitoring Guru</h2>
+                    <p class="text-desc" style="margin-bottom:0;">Pantau kelengkapan unggahan lembar jawaban seluruh siswa dan lakukan inspeksi foto per nomor soal:</p>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <select id="guruKelasFilter" onchange="renderGuruDashboard()" style="padding:10px 16px; border-radius:12px; border:1.5px solid var(--border-ui); font-weight:700; outline:none;">
+                        <option value="ALL">Semua Kelas (11.1, 11.2, 11.3)</option>
+                        <option value="11.1">Kelas 11.1</option>
+                        <option value="11.2">Kelas 11.2</option>
+                        <option value="11.3">Kelas 11.3</option>
+                    </select>
+                    <button class="btn-refresh" onclick="loadServerData()"><i class="fa-solid fa-arrows-rotate"></i> Refresh Realtime</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th style="width:90px;">Kelas</th>
+                            <th style="text-align:left;">Nama Murid</th>
+                            <th>Target Soal</th>
+                            <th>Progres Unggah</th>
+                            <th>Total Foto</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbGuruMonitor"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Hidden File Input for Single Photo Replacement -->
+<input type="file" id="replaceInputHidden" accept="image/*" style="display:none;" onchange="handleSingleReplaceFile(event)">
+
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxssEioGmT-dYQ3pm0JCpd0Rzmzo1AblZSRxltKxZ4PJdts_AQX7Y4TIJ5bCdgHSI6b/exec";
+    const TOTAL_SOAL = 10;
+
+    // Database murid lengkap Kelas XI (11.1, 11.2, 11.3)
+    const listMuridData = [
+        { nama: "Daffano Untung Al Asyraf", kelas: "11.1" }, { nama: "Marvel", kelas: "11.1" },
+        { nama: "Meara Aurelia Zalfa", kelas: "11.1" }, { nama: "Muhammad Arghad Fikri", kelas: "11.1" },
+        { nama: "Nafil Zaki Faisal", kelas: "11.1" }, { nama: "Salsabilah", kelas: "11.1" },
+        { nama: "Shafira Keyla Janeta", kelas: "11.1" }, { nama: "Syahwa Syahda Syahraeni", kelas: "11.1" },
+        { nama: "Zara Jaudah Wafa", kelas: "11.1" }, { nama: "Faraz Raissa Neoma Ardahany", kelas: "11.1" },
+        { nama: "Aliya Saputri", kelas: "11.2" }, { nama: "Gusti Naifa Adhya Shafira", kelas: "11.2" },
+        { nama: "Muhammad Rakha Ali", kelas: "11.2" }, { nama: "Muhammad Reyvan Albukhori", kelas: "11.2" },
+        { nama: "Najwan Azhim Mumtazhar", kelas: "11.2" }, { nama: "Safa Faizia", kelas: "11.2" },
+        { nama: "Zulfan Azhar Raihan", kelas: "11.2" }, { nama: "Ahmad Syauqi Abrari", kelas: "11.3" },
+        { nama: "Ahmad Yazid Ar-Raqqasyi", kelas: "11.3" }, { nama: "Amelia Revalina Fasha", kelas: "11.3" },
+        { nama: "Anisa Nayla", kelas: "11.3" }, { nama: "Aufa Bil Ahdi", kelas: "11.3" },
+        { nama: "Irfan Hafizha", kelas: "11.3" }, { nama: "Liyana Zahira", kelas: "11.3" },
+        { nama: "Nasya Salsa Balqis Aurora Illahi", kelas: "11.3" }, { nama: "Putri Asma Ramadhani", kelas: "11.3" },
+        { nama: "Rani Alyssa Putri", kelas: "11.3" }
+    ];
+
+    // Data Soal Lengkap (3 Penjumlahan, 3 Pengurangan, 4 Perkalian)
+    const soalDatabase = [
+        {
+            no: 1,
+            subBadge: "Soal No. 1 (Materi #1)",
+            materiTag: "MATRIKS – PENJUMLAHAN",
+            pertanyaan: "Diketahui matriks $A = \\begin{bmatrix} 4 & -2 \\\\ 5 & 1 \\end{bmatrix}$ dan $B = \\begin{bmatrix} -1 & 7 \\\\ 3 & -4 \\end{bmatrix}$. Hitunglah hasil penjumlahan matriks $A + B$!"
+        },
+        {
+            no: 2,
+            subBadge: "Soal No. 2 (Materi #1)",
+            materiTag: "MATRIKS – PENJUMLAHAN",
+            pertanyaan: "Tentukan hasil penjumlahan dari matriks ordo $2 \\times 3$ berikut:<br>$$\\begin{bmatrix} 2 & 0 & -5 \\\\ 1 & 4 & 3 \\end{bmatrix} + \\begin{bmatrix} 3 & -2 & 8 \\\\ -6 & 1 & 0 \\end{bmatrix}$$"
+        },
+        {
+            no: 3,
+            subBadge: "Soal No. 3 (Materi #1)",
+            materiTag: "MATRIKS – PENJUMLAHAN",
+            pertanyaan: "Diketahui matriks $P = \\begin{bmatrix} 1 & -3 & 2 \\\\ 0 & 4 & -1 \\\\ 5 & 2 & 7 \\end{bmatrix}$ dan $O = \\begin{bmatrix} 0 & 0 & 0 \\\\ 0 & 0 & 0 \\\\ 0 & 0 & 0 \\end{bmatrix}$. Tentukan hasil dari $P + O$ dan jelaskan sifat penjumlahan yang berlaku!"
+        },
+        {
+            no: 4,
+            subBadge: "Soal No. 4 (Materi #2)",
+            materiTag: "MATRIKS – PENGURANGAN",
+            pertanyaan: "Diketahui matriks-matriks:<br>$$A = \\begin{bmatrix} ^3\\log 27 & 0 \\\\ 0 & ^7\\log 21 \\end{bmatrix} \\quad \\text{dan} \\quad B = \\begin{bmatrix} ^3\\log 81 & 1 \\\\ -1 & ^7\\log 3 \\end{bmatrix}$$<br>Tentukan hasil pengurangan matriks $A - B$!"
+        },
+        {
+            no: 5,
+            subBadge: "Soal No. 5 (Materi #2)",
+            materiTag: "MATRIKS – PENGURANGAN",
+            pertanyaan: "Tentukan hasil pengurangan dari matriks ordo $3 \\times 2$ berikut:<br>$$\\begin{bmatrix} 5 & -3 \\\\ 1 & 0 \\\\ -4 & 6 \\end{bmatrix} - \\begin{bmatrix} 2 & 4 \\\\ -3 & 2 \\\\ 1 & -2 \\end{bmatrix}$$"
+        },
+        {
+            no: 6,
+            subBadge: "Soal No. 6 (Materi #2)",
+            materiTag: "MATRIKS – PENGURANGAN",
+            pertanyaan: "Diberikan matriks $M = \\begin{bmatrix} 2 & 1 \\\\ 4 & -3 \\\\ 0 & 5 \\end{bmatrix}$ (ordo $3 \\times 2$) dan matriks $N = \\begin{bmatrix} 1 & 3 & -2 \\\\ 4 & 0 & 6 \\end{bmatrix}$ (ordo $2 \\times 3$). Apakah operasi $M - N$ dapat dilakukan? Berikan penjelasan berdasarkan syarat ordo pengurangan matriks!"
+        },
+        {
+            no: 7,
+            subBadge: "Soal No. 7 (Materi #3)",
+            materiTag: "MATRIKS – PERKALIAN SKALAR",
+            pertanyaan: "Misalkan matriks $A = \\begin{bmatrix} 4 & -\\frac{1}{2} & 6 \\\\ -2 & \\frac{3}{4} & 8 \\end{bmatrix}$ dan $k = -\\frac{1}{2}$. Tentukan hasil perkalian skalar $kA$!"
+        },
+        {
+            no: 8,
+            subBadge: "Soal No. 8 (Materi #3)",
+            materiTag: "MATRIKS – PERKALIAN SKALAR",
+            pertanyaan: "Diketahui matriks $P = \\begin{bmatrix} 1 & -8 \\\\ -1 & -2 \\end{bmatrix}$, $Q = \\begin{bmatrix} 3 & 2 \\\\ -1 & 2 \\end{bmatrix}$, dan matriks $X$ berordo $2 \\times 2$ yang memenuhi persamaan:<br>$$P - 2X = 3Q$$<br>Tentukan elemen-elemen matriks $X$!"
+        },
+        {
+            no: 9,
+            subBadge: "Soal No. 9 (Materi #4)",
+            materiTag: "MATRIKS – PERKALIAN DUA MATRIKS",
+            pertanyaan: "Tentukan hasil perkalian dua matriks ordo $2 \\times 2$ berikut dengan menuliskan langkah perkalian baris kali kolom secara lengkap:<br>$$\\begin{bmatrix} 2 & 1 \\\\ 3 & 4 \\end{bmatrix} \\begin{bmatrix} 1 & -2 \\\\ 0 & 3 \\end{bmatrix}$$"
+        },
+        {
+            no: 10,
+            subBadge: "Soal No. 10 (Materi #4)",
+            materiTag: "MATRIKS – PERKALIAN DUA MATRIKS",
+            pertanyaan: "Diketahui perkalian matriks dengan variabel:<br>$$\\begin{bmatrix} x - 2 & 9 \\\\ -3 & 0 \\end{bmatrix} \\begin{bmatrix} -4 & 0 \\\\ 1 & y + 1 \\end{bmatrix} = \\begin{bmatrix} -3 & -9 \\\\ 12 & 0 \\end{bmatrix}$$<br>Tentukan nilai dari $x$, $y$, dan hasil penjumlahan $x + y$!"
+        }
+    ];
+
+    // Struktur Penyimpanan Foto: Objek berisi array base64 per soal { 1: [], 2: [], ..., 10: [] }
+    let photosPerSoal = {};
+    for (let i = 1; i <= TOTAL_SOAL; i++) {
+        photosPerSoal[i] = [];
+    }
+
+    let userRole = null;
+    let activeMurid = null;
+    let submissionCache = {};
+    let replaceTarget = { soalNo: null, photoIndex: null };
+
+    // FUNGSI MODAL
+    function showModal(title, msg) {
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalMessage').innerText = msg;
+        document.getElementById('customModal').style.display = 'flex';
+    }
+    function closeModal() { document.getElementById('customModal').style.display = 'none'; }
+    function openLightbox(src) {
+        if (!src) return;
+        document.getElementById('lightboxImg').src = src;
+        document.getElementById('lightboxModal').style.display = 'flex';
+    }
+    function closeLightbox() { document.getElementById('lightboxModal').style.display = 'none'; }
+    function closeInspectModal() { document.getElementById('inspectModal').style.display = 'none'; }
+
+    // RENDER 10 KARTU SOAL & TRACKER
+    function renderSoalCards() {
+        const container = document.getElementById('soalListContainer');
+        const trackerWrap = document.getElementById('trackerListWrap');
+        
+        container.innerHTML = '';
+        trackerWrap.innerHTML = '';
+
+        soalDatabase.forEach(s => {
+            // Render Soal Card
+            container.innerHTML += `
+                <div class="soal-box-container" id="card_soal_${s.no}">
+                    <div class="soal-top-row">
+                        <span class="soal-badge-pill">${s.subBadge}</span>
+                        <span class="soal-topic-header">${s.materiTag}</span>
+                    </div>
+
+                    <div class="soal-content-border">
+                        ${s.pertanyaan}
+                    </div>
+
+                    <div class="upload-section-row">
+                        <span class="upload-title-text">Upload Foto Jawaban (Maks 5 Foto):</span>
+                        <span class="upload-counter-badge" id="counter_soal_${s.no}">0/5 Foto</span>
+                    </div>
+
+                    <input type="file" id="file_input_${s.no}" accept="image/*" multiple style="display:none;" onchange="handleFilesUpload(event, ${s.no})">
+
+                    <div class="file-input-bar">
+                        <button type="button" class="btn-choose-file" onclick="document.getElementById('file_input_${s.no}').click()">
+                            Choose Files
+                        </button>
+                        <span class="file-name-indicator" id="fileName_soal_${s.no}">No file chosen</span>
+                    </div>
+
+                    <div class="preview-green-title" id="previewTitle_${s.no}">Pratinjau Foto Lembar Jawaban:</div>
+                    <div class="thumbnail-gallery-grid" id="gallery_soal_${s.no}"></div>
+                </div>
+            `;
+
+            // Render Sidebar Tracker Item
+            trackerWrap.innerHTML += `
+                <div class="tracker-item" id="trk_${s.no}">
+                    <span>${s.no}. ${s.subBadge}</span>
+                    <i class="fa-regular fa-circle"></i>
+                </div>
+            `;
+        });
+
+        if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
+            MathJax.typesetPromise();
+        }
+    }
+
+    // MULTI-UPLOAD FOTO HANDLER PER SOAL
+    function handleFilesUpload(event, soalNo) {
+        const files = Array.from(event.target.files);
+        if (!files.length) return;
+
+        if (photosPerSoal[soalNo].length + files.length > 5) {
+            showModal("Batas Maksimal", `Maksimal 5 foto untuk Soal No. ${soalNo}!`);
+            return;
+        }
+
+        files.forEach(file => {
+            if (!file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                photosPerSoal[soalNo].push(e.target.result);
+                renderThumbnailsForSoal(soalNo);
+                updateTrackerProgress();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        event.target.value = "";
+    }
+
+    function triggerEditSinglePhoto(soalNo, photoIdx) {
+        replaceTarget = { soalNo: soalNo, photoIndex: photoIdx };
+        document.getElementById('replaceInputHidden').click();
+    }
+
+    function handleSingleReplaceFile(event) {
+        const file = event.target.files[0];
+        if (!file || replaceTarget.soalNo === null) return;
+
+        if (!file.type.startsWith('image/')) {
+            showModal("Format Tidak Didukung", "Harap pilih berkas foto/gambar!");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            photosPerSoal[replaceTarget.soalNo][replaceTarget.photoIndex] = e.target.result;
+            renderThumbnailsForSoal(replaceTarget.soalNo);
+            replaceTarget = { soalNo: null, photoIndex: null };
+            updateTrackerProgress();
+        };
+        reader.readAsDataURL(file);
+        event.target.value = "";
+    }
+
+    function deleteSinglePhoto(soalNo, photoIdx) {
+        photosPerSoal[soalNo].splice(photoIdx, 1);
+        renderThumbnailsForSoal(soalNo);
+        updateTrackerProgress();
+    }
+
+    function renderThumbnailsForSoal(soalNo) {
+        const gallery = document.getElementById(`gallery_soal_${soalNo}`);
+        const previewTitle = document.getElementById(`previewTitle_${soalNo}`);
+        const counterBadge = document.getElementById(`counter_soal_${soalNo}`);
+        const fileNameInd = document.getElementById(`fileName_soal_${soalNo}`);
+
+        const list = photosPerSoal[soalNo];
+        counterBadge.innerText = `${list.length}/5 Foto`;
+
+        if (list.length === 0) {
+            previewTitle.style.display = 'none';
+            gallery.innerHTML = '';
+            fileNameInd.innerText = 'No file chosen';
+            return;
+        }
+
+        fileNameInd.innerText = `${list.length} file dipilih`;
+        previewTitle.style.display = 'block';
+
+        gallery.innerHTML = list.map((src, idx) => `
+            <div class="photo-thumb-card">
+                <img src="${src}" alt="Foto ${idx + 1}">
+                <button type="button" class="btn-thumb-zoom" title="Perbesar Foto" onclick="openLightbox('${src}')">
+                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                </button>
+                <button type="button" class="btn-thumb-edit" title="Ganti Foto" onclick="triggerEditSinglePhoto(${soalNo}, ${idx})">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+                <button type="button" class="btn-thumb-del" title="Hapus Foto" onclick="deleteSinglePhoto(${soalNo}, ${idx})">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <span class="thumb-bottom-label">Foto ${idx + 1}</span>
+            </div>
+        `).join('');
+    }
+
+    // TRACKER PROGRES SOAL REALTIME (OTOMATIS HIJAU SAAT ADA FOTO)
+    function updateTrackerProgress() {
+        let uploadedCount = 0;
+        let totalPhotosCount = 0;
+
+        for (let i = 1; i <= TOTAL_SOAL; i++) {
+            const count = photosPerSoal[i].length;
+            totalPhotosCount += count;
+            const trkEl = document.getElementById(`trk_${i}`);
+
+            if (count > 0) {
+                uploadedCount++;
+                if (trkEl) {
+                    trkEl.classList.add('done');
+                    trkEl.querySelector('i').className = 'fa-solid fa-circle-check';
+                }
+            } else {
+                if (trkEl) {
+                    trkEl.classList.remove('done');
+                    trkEl.querySelector('i').className = 'fa-regular fa-circle';
+                }
+            }
+        }
+
+        const pill = document.getElementById('trackerCounterPill');
+        if (pill) {
+            pill.innerText = `${uploadedCount} / ${TOTAL_SOAL} Soal`;
+            pill.className = (uploadedCount === TOTAL_SOAL) ? 'badge-status badge-done' : 'badge-status badge-lengkap';
+        }
+
+        const mProg = document.getElementById('m_progres_val');
+        if (mProg) mProg.innerText = `${uploadedCount} / ${TOTAL_SOAL} Soal`;
+
+        const mTotal = document.getElementById('m_total_foto_val');
+        if (mTotal) mTotal.innerText = `${totalPhotosCount} Foto`;
+
+        // Render Tabel Status di Dashboard Siswa
+        const tbStatus = document.getElementById('tbMuridSoalStatus');
+        if (tbStatus) {
+            tbStatus.innerHTML = soalDatabase.map(s => {
+                const count = photosPerSoal[s.no].length;
+                return `
+                    <tr style="${count > 0 ? 'background:#f0fdf4;' : ''}">
+                        <td><b>${s.no}</b></td>
+                        <td style="text-align:left; font-weight:700;">${s.subBadge}</td>
+                        <td>${s.materiTag}</td>
+                        <td><b>${count} Foto</b></td>
+                        <td>
+                            ${count > 0 
+                                ? `<span class="badge-status badge-done"><i class="fa-solid fa-check"></i> Terunggah</span>` 
+                                : `<span class="badge-status badge-pending"><i class="fa-regular fa-clock"></i> Belum</span>`}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    }
+
+    // LOGIN & AUTENTIKASI
+    function submitLogin() {
+        const idVal = document.getElementById('loginId').value.trim();
+        const passVal = document.getElementById('loginPass').value.trim();
+        const errEl = document.getElementById('loginErrMsg');
+        errEl.innerText = "";
+
+        if (!idVal || !passVal) {
+            errEl.innerText = "ID dan Password wajib diisi!";
+            return;
+        }
+
+        // Akun Guru Rahasia
+        if (idVal.toLowerCase() === "guru" && passVal === "admin") {
+            userRole = "guru";
+            activeMurid = null;
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('btnNavGuru').style.display = 'flex';
+            document.getElementById('dispNamaMurid').innerText = "Selamat Datang, Bapak/Ibu Guru!";
+            document.getElementById('dispKelasMurid').innerText = "Panel Kontrol Guru & Inspeksi Lembar Kerja - Al Mazaya Islamic School";
+            loadServerData();
+            switchTab('tab-guru', document.getElementById('btnNavGuru'));
+            return;
+        }
+
+        // Akun Murid
+        if (passVal === "amz") {
+            const match = listMuridData.find(m => m.nama.toLowerCase().includes(idVal.toLowerCase()));
+            if (match) {
+                userRole = "murid";
+                activeMurid = match;
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('btnNavGuru').style.display = 'none'; // Sembunyikan Nav Guru
+                document.getElementById('dispNamaMurid').innerText = "Selamat Datang, " + match.nama;
+                document.getElementById('dispKelasMurid').innerText = "Kelas " + match.kelas + " - Al Mazaya Islamic School";
+                updateTrackerProgress();
+                loadServerData();
+                switchTab('tab-soal', document.querySelector('.pill-btn'));
+                return;
+            } else {
+                errEl.innerText = "Nama tidak ditemukan dalam daftar murid Kelas XI!";
+                return;
+            }
+        } else {
+            errEl.innerText = "Password salah! (Password Murid: amz)";
+            return;
+        }
+    }
+
+    function logout() {
+        userRole = null;
+        activeMurid = null;
+        document.getElementById('loginId').value = "";
+        document.getElementById('loginPass').value = "";
+        document.getElementById('loginErrMsg').innerText = "";
+        document.getElementById('loginOverlay').style.display = 'flex';
+    }
+
+    function switchTab(tabId, btn) {
+        if (userRole === "murid" && tabId === "tab-guru") {
+            showModal("Akses Ditolak", "Tab ini khusus untuk Guru.");
+            return;
+        }
+
+        document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.pill-btn').forEach(el => el.classList.remove('active'));
+        
+        const target = document.getElementById(tabId);
+        if(target) target.classList.add('active');
+        if(btn) btn.classList.add('active');
+
+        updateTrackerProgress();
+        loadServerData();
+    }
+
+    // KIRIM JAWABAN KE GOOGLE SHEET
+    function kirimJawaban() {
+        if (!activeMurid) {
+            showModal("Belum Login", "Harap login sebagai murid terlebih dahulu!");
+            return;
+        }
+
+        let uploadedSoalCount = 0;
+        let totalPhotosCount = 0;
+        let detailParts = [];
+
+        for (let i = 1; i <= TOTAL_SOAL; i++) {
+            const count = photosPerSoal[i].length;
+            totalPhotosCount += count;
+            if (count > 0) {
+                uploadedSoalCount++;
+                detailParts.push(`Soal${i}:${count}Foto`);
+            }
+        }
+
+        const payload = {
+            nama: activeMurid.nama,
+            kelas: activeMurid.kelas,
+            skor: uploadedSoalCount * 10,
+            detail: `Progres:${uploadedSoalCount}/${TOTAL_SOAL} | TotalFoto:${totalPhotosCount} | ${detailParts.join(", ")}`,
+            photosData: photosPerSoal,
+            foto: photosPerSoal[1][0] || photosPerSoal[2][0] || ""
+        };
+
+        const statusEl = document.getElementById('submitStatusMsg');
+        statusEl.style.color = "var(--primary)";
+        statusEl.innerText = "Mengirim data dan foto jawaban ke Google Sheet server...";
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        }).then(() => {
+            statusEl.style.color = "var(--success)";
+            statusEl.innerHTML = `✅ Berhasil dikirim! Sheet atas nama <b>"${activeMurid.nama}"</b> telah diperbarui.<br>Progres: <b>${uploadedSoalCount}/${TOTAL_SOAL} Soal Terunggah</b> (${totalPhotosCount} Foto).`;
+            setTimeout(loadServerData, 1500);
+        }).catch(() => {
+            statusEl.style.color = "var(--danger)";
+            statusEl.innerText = "❌ Terjadi kendala koneksi ke Google Apps Script.";
+        });
+    }
+
+    // FETCH SERVER DATA & RENDER MONITORING GURU
+    function loadServerData() {
+        if (!SCRIPT_URL) {
+            renderGuruDashboard();
+            renderMuridDashboard();
+            return;
+        }
+
+        fetch(SCRIPT_URL)
+            .then(res => res.json())
+            .then(res => {
+                if (res.result === "success" && res.data) {
+                    submissionCache = {};
+                    res.data.forEach(item => {
+                        submissionCache[item.nama] = {
+                            waktu: item.waktu,
+                            skor: parseFloat(item.skor) || 0,
+                            detail: item.detail || "",
+                            foto: item.foto || "",
+                            photosData: item.photosData || null,
+                            status: "Tersimpan"
+                        };
+                    });
+                    renderMuridDashboard();
+                    renderGuruDashboard();
+                }
+            })
+            .catch(err => console.error("Error loading server data:", err));
+    }
+
+    function parseDoneCount(detailStr, isSubmitted) {
+        if (!isSubmitted) return 0;
+        if (!detailStr) return TOTAL_SOAL;
+        const match = detailStr.match(/Progres:(\d+)\/(\d+)/);
+        if (match && match[1]) {
+            return Math.min(parseInt(match[1], 10), TOTAL_SOAL);
+        }
+        return TOTAL_SOAL;
+    }
+
+    function renderMuridDashboard() {
+        updateTrackerProgress();
+        const tb = document.getElementById('tbMuridSyncHistory');
+        if (!activeMurid) {
+            tb.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted);">Akses khusus guru aktif.</td></tr>`;
+            return;
+        }
+
+        const item = submissionCache[activeMurid.nama];
+
+        if (item) {
+            const doneCount = parseDoneCount(item.detail, true);
+            document.getElementById('m_status_text').innerText = "Tersimpan";
+            document.getElementById('m_status_text').style.color = "var(--success)";
+
+            tb.innerHTML = `
+                <tr>
+                    <td>${item.waktu}</td>
+                    <td>10 Soal Operasi Matriks (Penjumlahan, Pengurangan, Perkalian)</td>
+                    <td><b>${doneCount} / ${TOTAL_SOAL} Soal</b></td>
+                    <td><span class="badge-status badge-done"><i class="fa-solid fa-check"></i> Sheet Terbuat</span></td>
+                </tr>
+            `;
+        } else {
+            document.getElementById('m_status_text').innerText = "Belum Mengirim";
+            document.getElementById('m_status_text').style.color = "var(--accent)";
+            tb.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted);">Belum ada laporan masuk untuk ${activeMurid.nama}.</td></tr>`;
+        }
+    }
+
+    function renderGuruDashboard() {
+        const filter = document.getElementById('guruKelasFilter').value;
+        const tb = document.getElementById('tbGuruMonitor');
+        tb.innerHTML = '';
+
+        let dataFiltered = listMuridData;
+        if (filter !== 'ALL') {
+            dataFiltered = listMuridData.filter(m => m.kelas === filter);
+        }
+
+        dataFiltered.forEach(m => {
+            const cache = submissionCache[m.nama];
+            const isDone = cache !== undefined;
+            const doneCount = parseDoneCount(isDone ? cache.detail : "", isDone);
+
+            // Hitung total foto dari detail string
+            let totalFotoText = "-";
+            if (isDone && cache.detail) {
+                const fotoMatch = cache.detail.match(/TotalFoto:(\d+)/);
+                if (fotoMatch && fotoMatch[1]) totalFotoText = `${fotoMatch[1]} Foto`;
+            }
+
+            let statusBadge = `<span class="badge-status badge-belum"><i class="fa-solid fa-clock"></i> Belum</span>`;
+            if (isDone) {
+                if (doneCount >= TOTAL_SOAL) {
+                    statusBadge = `<span class="badge-status badge-lengkap"><i class="fa-solid fa-check"></i> Lengkap (10/10)</span>`;
+                } else if (doneCount > 0) {
+                    statusBadge = `<span class="badge-status badge-sebagian"><i class="fa-solid fa-spinner"></i> Sebagian</span>`;
+                }
+            }
+
+            const escapedName = m.nama.replace(/'/g, "\\'");
+
+            tb.innerHTML += `
+                <tr style="${isDone ? 'background:#f0fdf4;' : ''}">
+                    <td style="color:#4f46e5; font-weight:800;">${m.kelas}</td>
+                    <td style="text-align:left; font-weight:800; color:#1e293b;">${m.nama}</td>
+                    <td style="font-weight:700; color:#334155;">${TOTAL_SOAL} Soal</td>
+                    <td style="color:#4f46e5; font-weight:800;">${doneCount} / ${TOTAL_SOAL} Soal</td>
+                    <td><b>${totalFotoText}</b></td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <button class="btn-inspeksi" onclick="openInspectMurid('${escapedName}', '${m.kelas}')">
+                            <i class="fa-solid fa-eye"></i> Inspeksi
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    function openInspectMurid(nama, kelas) {
+        const cache = submissionCache[nama];
+        document.getElementById('insNamaMurid').innerText = nama;
+        const bodyEl = document.getElementById('insBodyContent');
+
+        if (!cache) {
+            document.getElementById('insMetaMurid').innerText = `Kelas ${kelas} • Status: Belum Mengirim Jawaban`;
+            bodyEl.innerHTML = `
+                <div style="padding:24px; background:#fff7ed; border:1.5px solid #fed7aa; border-radius:16px; color:#c2410c; font-weight:700; text-align:center;">
+                    <i class="fa-solid fa-circle-exclamation" style="font-size:1.8rem; margin-bottom:8px; display:block;"></i>
+                    Murid ini belum mengirimkan lembar soal ke server.
+                </div>
+            `;
+        } else {
+            const doneCount = parseDoneCount(cache.detail, true);
+            document.getElementById('insMetaMurid').innerText = `Kelas ${kelas} • Waktu Submit: ${cache.waktu} • Progres: ${doneCount}/${TOTAL_SOAL} Soal`;
+
+            let inspectionHtml = `
+                <div style="background:#f8fafc; border:1px solid var(--border-ui); border-radius:12px; padding:16px; margin-bottom:20px;">
+                    <div style="font-weight:800; font-size:0.9rem; color:#4338ca; margin-bottom:4px;">
+                        <i class="fa-solid fa-circle-info"></i> Ringkasan Unggahan:
+                    </div>
+                    <div style="font-size:0.85rem; color:#475569;">${cache.detail}</div>
+                </div>
+            `;
+
+            // Jika ada foto terunggah di cache lokal saat sesi
+            if (activeMurid && activeMurid.nama === nama) {
+                inspectionHtml += `<h4 style="font-size:0.95rem; font-weight:800; margin-bottom:14px; color:var(--text-main);">Galeri Foto Lembar Jawaban per Nomor:</h4>`;
+                for (let i = 1; i <= TOTAL_SOAL; i++) {
+                    const photos = photosPerSoal[i];
+                    inspectionHtml += `
+                        <div style="border:1px solid #e2e8f0; border-radius:12px; padding:14px; margin-bottom:12px; background:white;">
+                            <b style="color:#4f46e5;">Soal No. ${i} (${photos.length} Foto):</b>
+                            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+                                ${photos.length > 0 
+                                    ? photos.map(p => `
+                                        <div class="photo-thumb-card" style="width:110px; height:110px;">
+                                            <img src="${p}" alt="Foto Soal ${i}">
+                                            <button type="button" class="btn-thumb-zoom" onclick="openLightbox('${p}')">
+                                                <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                            </button>
+                                        </div>`).join('') 
+                                    : `<span style="color:#94a3b8; font-size:0.85rem; font-style:italic;">Belum ada foto untuk soal ini</span>`}
+                            </div>
+                        </div>
+                    `;
+                }
+            } else if (cache.foto) {
+                inspectionHtml += `
+                    <h4 style="font-size:0.95rem; font-weight:800; margin-bottom:14px; color:var(--text-main);">Sampel Foto Lembar Jawaban Terkirim:</h4>
+                    <div class="photo-thumb-card" style="width:160px; height:160px;">
+                        <img src="${cache.foto}" alt="Foto Jawaban">
+                        <button type="button" class="btn-thumb-zoom" onclick="openLightbox('${cache.foto}')">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        </button>
+                        <span class="thumb-bottom-label">Klik Zoom</span>
+                    </div>
+                `;
+            } else {
+                inspectionHtml += `<p style="color:#94a3b8; font-style:italic;">Tidak ada file foto yang tersimpan.</p>`;
+            }
+
+            bodyEl.innerHTML = inspectionHtml;
+        }
+
+        document.getElementById('inspectModal').style.display = 'flex';
+    }
+
+    // Inisialisasi awal saat load
+    document.addEventListener("DOMContentLoaded", function() {
+        renderSoalCards();
+        updateTrackerProgress();
+    });
+</script>
+
+</body>
+</html>
